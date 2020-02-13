@@ -49,21 +49,21 @@ axios.get("https://api.github.com/users/MMGroesbeck")
   }
 */
 
-// axios.get("https://api.github.com/users/MMGroesbeck/followers")
-//   .then(res => {
-//     res.data.forEach((item) => {
-//       axios.get(item.url)
-//         .then(res => {
-//           cardMain.append(newCard(res.data));
-//         })
-//         .catch(err => {
-//           // console.log("Follower API request not completed. " + err);
-//         })
-//     });
-//   })
-//   .catch(err => {
-//     // console.log("API request not completed. " + err);
-//   });
+axios.get("https://api.github.com/users/MMGroesbeck/followers")
+  .then(res => {
+    res.data.forEach((item) => {
+      axios.get(item.url)
+        .then(res => {
+          cardMain.append(newCard(res.data));
+        })
+        .catch(err => {
+          // console.log("Follower API request not completed. " + err);
+        })
+    });
+  })
+  .catch(err => {
+    // console.log("API request not completed. " + err);
+  });
 
 const followersArray = [];
 
@@ -107,6 +107,7 @@ function newCard (info){
   const followersURL = document.createElement('a');
   const followingLink = document.createElement('p');
   const followingURL = document.createElement('a');
+  const gitCal = document.createElement('div');
   const expandButton = document.createElement('span');
 
   // Add classes:
@@ -116,12 +117,13 @@ function newCard (info){
   extraInfo.classList.add('extra-info', 'hidden');
   newName.classList.add('name');
   newUserName.classList.add('username');
+  gitCal.classList.add('calendar');
   expandButton.classList.add('expandButton');
 
   // Organize structure:
   cardInfo.append(newName, newUserName, location, profile, followers, following, bio);
   sectionOne.append(img, cardInfo);
-  extraInfo.append(followersLink, followingLink);
+  extraInfo.append(gitCal, followersLink, followingLink);
   card.append(sectionOne, extraInfo, expandButton);
 
   // Add content:
@@ -140,6 +142,7 @@ function newCard (info){
   } else {
     bio.textContent = "Bio not provided on GitHub."
   }
+  GitHubCalendar(gitCal, info.login, {responsive: true});
   followersLink.textContent = "Followers page: ";
   followersURL.href = info.followers_url;
   followersURL.textContent = info.followers_url;
@@ -149,6 +152,7 @@ function newCard (info){
   followingURL.textContent = info.following_url.slice(0,-13);
   followingLink.append(followingURL);
   expandButton.textContent = '\u25bc';
+
   // add event listener for button:
   expandButton.addEventListener('click', () => {
     extraInfo.classList.toggle('hidden');
