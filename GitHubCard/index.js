@@ -24,7 +24,7 @@ const cardMain = document.querySelector('.cards');
 
 axios.get("https://api.github.com/users/MMGroesbeck")
   .then(res => {
-    // console.log(res);
+    console.log(res);
     cardMain.append(newCard(res.data))
   })
   .catch(err => {
@@ -133,8 +133,8 @@ function newCard (info){
   location.textContent = info.location;
   profile.textContent = "Profile: ";
   profile.append(profileLink);
-  profileLink.href = info.url;
-  profileLink.textContent = info.url;
+  profileLink.href = 'https://github.com' + info.url.slice(28);
+  profileLink.textContent = 'https://github.com' + info.url.slice(28);
   followers.textContent = "Followers: " + info.followers;
   following.textContent = "Following: " + info.following;
   if (info.bio){
@@ -144,12 +144,12 @@ function newCard (info){
   }
   GitHubCalendar(gitCal, info.login, {responsive: true});
   followersLink.textContent = "Followers page: ";
-  followersURL.href = info.followers_url;
-  followersURL.textContent = info.followers_url;
+  followersURL.href = 'https://github.com' + info.followers_url.slice(28);
+  followersURL.textContent = 'https://github.com' + info.followers_url.slice(28);
   followersLink.append(followersURL);
   followingLink.textContent = "Following page: ";
-  followingURL.href = info.following_url.slice(0,-13);
-  followingURL.textContent = info.following_url.slice(0,-13);
+  followingURL.href = 'https://github.com' + info.following_url.slice(28,-13);
+  followingURL.textContent = 'https://github.com' + info.following_url.slice(28,-13);
   followingLink.append(followingURL);
   expandButton.textContent = '\u25bc';
 
